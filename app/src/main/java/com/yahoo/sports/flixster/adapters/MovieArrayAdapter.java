@@ -1,6 +1,7 @@
 package com.yahoo.sports.flixster.adapters;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,11 +40,6 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_item, parent, false);
         }
 
-        // load poster image
-        ivMoviePoster = (ImageView) convertView.findViewById(R.id.ivMoviePoster);
-        ivMoviePoster.setImageResource(0);
-        Picasso.with(getContext()).load(movie.getPosterPath()).into(ivMoviePoster);
-
         // load title
         tvTitle = (TextView)convertView.findViewById(R.id.tvMovieTitle);
         tvTitle.setText(movie.getTitle());
@@ -51,6 +47,24 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         // load overview
         tvOverview = (TextView)convertView.findViewById(R.id.tvMovieOverview);
         tvOverview.setText(movie.getOverview());
+
+        // reset any previously loaded image
+        ivMoviePoster = (ImageView) convertView.findViewById(R.id.ivMoviePoster);
+        ivMoviePoster.setImageResource(0);
+
+        // poster or backdrop based on portrait/landscape
+        String imagePath;
+        if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            imagePath = movie.getPosterPath();
+        } else {
+            imagePath = movie.getBackdropPath();
+        }
+
+        // load poster image
+        Picasso.with(getContext())
+                .load(imagePath)
+                .placeholder(R.drawable.loader)
+                .into(ivMoviePoster);
 
         return convertView;
     }
