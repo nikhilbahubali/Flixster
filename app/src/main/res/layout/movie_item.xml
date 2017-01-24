@@ -44,5 +44,6 @@
         android:textStyle="italic"
         android:paddingBottom="@dimen/font_size_extra_small"
         android:maxLines="4"
+        android:ellipsize="end"
         />
 </RelativeLayout>
