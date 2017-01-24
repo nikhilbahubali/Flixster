@@ -5,13 +5,15 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:scaleType="fitCenter"
+        tools:src="@mipmap/ic_launcher"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/ivMoviePoster" />
+        android:id="@+id/ivMoviePoster"
+        />
 
     <TextView
         tools:text="Assassin's Creed"
@@ -20,15 +22,23 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/ivMoviePoster"
         android:id="@+id/tvMovieTitle"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
+        android:textSize="@dimen/font_size_large"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        />
 
     <TextView
         tools:text="Lynch discovers he is a descendant of the secret Assassins society through unlocked genetic memories that allow him to relive the adventures of his ancestor, Aguilar, in 15th Century Spain. After gaining incredible knowledge and skills he’s poised to take on the oppressive Knights Templar in the present day."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvMovieOverview"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
         android:layout_below="@+id/tvMovieTitle"
         android:layout_toRightOf="@+id/ivMoviePoster"
-        android:layout_toEndOf="@+id/ivMoviePoster" />
+        android:layout_toEndOf="@+id/ivMoviePoster"
+        android:maxLines="3"
+        android:textSize="@dimen/font_size_medium"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="italic"
+        android:ellipsize="end"
+        />
 </RelativeLayout>
