@@ -16,14 +16,18 @@ import com.yahoo.sports.flixster.models.Movie;
 
 import java.util.List;
 
+import static com.yahoo.sports.flixster.R.id.ivMoviePoster;
+
 /**
  * Created by nikhilba on 1/23/17.
  */
 
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
-    private ImageView ivMoviePoster;
-    private TextView tvTitle;
-    private TextView tvOverview;
+    private static class ViewHolder {
+        public ImageView ivImage;
+        public TextView tvTitle;
+        public TextView tvOverview;
+    }
 
     public MovieArrayAdapter(Context context, List<Movie> movies) {
         super(context, android.R.layout.simple_list_item_1, movies);
@@ -35,22 +39,28 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         // get movie item for the view position
         Movie movie = getItem(position);
 
+        // viewholder cache
+        ViewHolder viewHolder = new ViewHolder();
+
         // inflate view if required
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_item, parent, false);
+
+            // load title
+            viewHolder.tvTitle = (TextView)convertView.findViewById(R.id.tvMovieTitle);
+            // load overview
+            viewHolder.tvOverview = (TextView)convertView.findViewById(R.id.tvMovieOverview);
+            // reset any previously loaded image
+            viewHolder.ivImage = (ImageView) convertView.findViewById(ivMoviePoster);
+
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        // load title
-        tvTitle = (TextView)convertView.findViewById(R.id.tvMovieTitle);
-        tvTitle.setText(movie.getTitle());
-
-        // load overview
-        tvOverview = (TextView)convertView.findViewById(R.id.tvMovieOverview);
-        tvOverview.setText(movie.getOverview());
-
-        // reset any previously loaded image
-        ivMoviePoster = (ImageView) convertView.findViewById(R.id.ivMoviePoster);
-        ivMoviePoster.setImageResource(0);
+        viewHolder.tvTitle.setText(movie.getTitle());
+        viewHolder.tvOverview.setText(movie.getOverview());
+        viewHolder.ivImage.setImageResource(0);
 
         // poster or backdrop based on portrait/landscape
         String imagePath;
@@ -64,7 +74,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         Picasso.with(getContext())
                 .load(imagePath)
                 .placeholder(R.drawable.loader)
-                .into(ivMoviePoster);
+                .into(viewHolder.ivImage);
 
         return convertView;
     }
