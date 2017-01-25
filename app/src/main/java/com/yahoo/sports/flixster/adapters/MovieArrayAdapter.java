@@ -16,6 +16,8 @@ import com.yahoo.sports.flixster.models.Movie;
 
 import java.util.List;
 
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+
 import static com.yahoo.sports.flixster.R.id.ivMoviePoster;
 
 /**
@@ -73,6 +75,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         // load poster image
         Picasso.with(getContext())
                 .load(imagePath)
+                .transform(new RoundedCornersTransformation(10, 10))
                 .placeholder(R.drawable.loader)
                 .into(viewHolder.ivImage);
 
