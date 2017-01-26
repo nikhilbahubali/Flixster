@@ -5,8 +5,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.yahoo.sports.flixster.adapters.MovieArrayAdapter;
 import com.yahoo.sports.flixster.models.Movie;
 
@@ -14,12 +12,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MovieActivity extends AppCompatActivity {
-    private static final String mUrl = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
+    private static final String API_URL = "https://api.themoviedb.org/3/movie/now_playing";
+    private static final String API_KEY = "api_key";
+    private static final String API_KEY_VALUE = "a07e22bc18f5cb106bfe4cc1f83ad8ed";
+
 
     private SwipeRefreshLayout swipeContainer;
     private ArrayList<Movie> mMovies = new ArrayList<>();
@@ -36,7 +43,7 @@ public class MovieActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchMovies();
+                fetchMovies(false);
             }
         });
 
@@ -54,34 +61,49 @@ public class MovieActivity extends AppCompatActivity {
         lvMovieItems = (ListView)findViewById(R.id.lvMovieItems);
         lvMovieItems.setAdapter(mMovieArrayAdapter);
 
-        fetchMovies();
+        fetchMovies(true);
     }
 
-    private void fetchMovies() {
+    private void fetchMovies(final boolean firstLoad) {
+        // create request
+        OkHttpClient client = new OkHttpClient();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(API_URL).newBuilder();
+        String url = urlBuilder.addQueryParameter(API_KEY, API_KEY_VALUE).build().toString();
+        Request request = new Request.Builder().url(url).build();
 
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(mUrl, new JsonHttpResponseHandler() {
+        // submit request, handle response
+        client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    // clear movies list from before
-                    mMovieArrayAdapter.clear();
-                    mMovies.clear();
+                    // get json results array
+                    JSONObject obj = new JSONObject(response.body().string());
+                    JSONArray results = obj.getJSONArray("results");
+                    final ArrayList<Movie> movies = Movie.fromJSONArray(results);
 
-                    // load new movies list
-                    JSONArray results = response.getJSONArray("results");
-                    mMovies.addAll(Movie.fromJSONArray(results));
+                    // update list view on ui thread
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // clear old data
+                            mMovieArrayAdapter.clear();
+                            mMovies.clear();
 
-                    // notify adapter
-                    mMovieArrayAdapter.notifyDataSetChanged();
+                            // load new movies list
+                            mMovies.addAll(movies);
 
-                    // if pull refresh, stop it
-                    swipeContainer.setRefreshing(false);
+                            // notify adapter
+                            mMovieArrayAdapter.notifyDataSetChanged();
+
+                            // if pull refresh, stop it
+                            swipeContainer.setRefreshing(false);
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
