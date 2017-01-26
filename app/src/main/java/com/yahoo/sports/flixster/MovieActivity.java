@@ -40,12 +40,7 @@ public class MovieActivity extends AppCompatActivity {
 
         // set up swipe refresh
         swipeContainer = (SwipeRefreshLayout)findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                fetchMovies(false);
-            }
-        });
+        swipeContainer.setOnRefreshListener(this::fetchMovies);
 
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -61,10 +56,10 @@ public class MovieActivity extends AppCompatActivity {
         lvMovieItems = (ListView)findViewById(R.id.lvMovieItems);
         lvMovieItems.setAdapter(mMovieArrayAdapter);
 
-        fetchMovies(true);
+        fetchMovies();
     }
 
-    private void fetchMovies(final boolean firstLoad) {
+    private void fetchMovies() {
         // create request
         OkHttpClient client = new OkHttpClient();
         HttpUrl.Builder urlBuilder = HttpUrl.parse(API_URL).newBuilder();
@@ -87,22 +82,19 @@ public class MovieActivity extends AppCompatActivity {
                     final ArrayList<Movie> movies = Movie.fromJSONArray(results);
 
                     // update list view on ui thread
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // clear old data
-                            mMovieArrayAdapter.clear();
-                            mMovies.clear();
+                    runOnUiThread(() -> {
+                        // clear old data
+                        mMovieArrayAdapter.clear();
+                        mMovies.clear();
 
-                            // load new movies list
-                            mMovies.addAll(movies);
+                        // load new movies list
+                        mMovies.addAll(movies);
 
-                            // notify adapter
-                            mMovieArrayAdapter.notifyDataSetChanged();
+                        // notify adapter
+                        mMovieArrayAdapter.notifyDataSetChanged();
 
-                            // if pull refresh, stop it
-                            swipeContainer.setRefreshing(false);
-                        }
+                        // if pull refresh, stop it
+                        swipeContainer.setRefreshing(false);
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
