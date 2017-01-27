@@ -3,9 +3,10 @@ package com.yahoo.sports.flixster;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ListView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
-import com.yahoo.sports.flixster.adapters.MovieArrayAdapter;
+import com.yahoo.sports.flixster.adapters.MovieRecyclerAdapter;
 import com.yahoo.sports.flixster.models.Movie;
 
 import org.json.JSONArray;
@@ -30,8 +31,8 @@ public class MovieActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout swipeContainer;
     private ArrayList<Movie> mMovies = new ArrayList<>();
-    private ListView lvMovieItems;
-    private MovieArrayAdapter mMovieArrayAdapter;
+    private RecyclerView rvMovieItems;
+    private MovieRecyclerAdapter movieRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +53,10 @@ public class MovieActivity extends AppCompatActivity {
     }
 
     private void populateMovieObjects() {
-        mMovieArrayAdapter = new MovieArrayAdapter(this, mMovies);
-        lvMovieItems = (ListView)findViewById(R.id.lvMovieItems);
-        lvMovieItems.setAdapter(mMovieArrayAdapter);
+        movieRecyclerAdapter = new MovieRecyclerAdapter(this, mMovies);
+        rvMovieItems = (RecyclerView)findViewById(R.id.rvMovieItems);
+        rvMovieItems.setAdapter(movieRecyclerAdapter);
+        rvMovieItems.setLayoutManager(new LinearLayoutManager(this));
 
         fetchMovies();
     }
@@ -84,14 +86,13 @@ public class MovieActivity extends AppCompatActivity {
                     // update list view on ui thread
                     runOnUiThread(() -> {
                         // clear old data
-                        mMovieArrayAdapter.clear();
                         mMovies.clear();
 
                         // load new movies list
                         mMovies.addAll(movies);
 
                         // notify adapter
-                        mMovieArrayAdapter.notifyDataSetChanged();
+                        movieRecyclerAdapter.notifyDataSetChanged();
 
                         // if pull refresh, stop it
                         swipeContainer.setRefreshing(false);
