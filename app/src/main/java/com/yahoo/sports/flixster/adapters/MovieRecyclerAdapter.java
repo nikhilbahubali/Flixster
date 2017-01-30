@@ -1,11 +1,14 @@
 package com.yahoo.sports.flixster.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.squareup.picasso.Picasso;
+import com.yahoo.sports.flixster.PlayVideoActivity;
 import com.yahoo.sports.flixster.R;
 import com.yahoo.sports.flixster.ViewHolderPopularMovie;
 import com.yahoo.sports.flixster.ViewHolderRegularMovie;
@@ -72,6 +75,14 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                     .transform(new RoundedCornersTransformation(10, 10))
                     .placeholder(R.drawable.loader)
                     .into(holderPopularMovie.getIvBackdrop());
+
+            holderPopularMovie.getIvBackdrop().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, PlayVideoActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 
