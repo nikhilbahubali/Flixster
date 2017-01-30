@@ -16,6 +16,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -29,18 +31,19 @@ public class MovieActivity extends AppCompatActivity {
     private static final String API_KEY_VALUE = "a07e22bc18f5cb106bfe4cc1f83ad8ed";
 
 
-    private SwipeRefreshLayout swipeContainer;
     private ArrayList<Movie> mMovies = new ArrayList<>();
-    private RecyclerView rvMovieItems;
     private MovieRecyclerAdapter movieRecyclerAdapter;
+
+    @BindView(R.id.rvMovieItems) RecyclerView rvMovieItems;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
+        ButterKnife.bind(this);
 
-        // set up swipe refresh
-        swipeContainer = (SwipeRefreshLayout)findViewById(R.id.swipeContainer);
+        // refresh movie list on swipe
         swipeContainer.setOnRefreshListener(this::fetchMovies);
 
         // Configure the refreshing colors
@@ -54,7 +57,6 @@ public class MovieActivity extends AppCompatActivity {
 
     private void populateMovieObjects() {
         movieRecyclerAdapter = new MovieRecyclerAdapter(this, mMovies);
-        rvMovieItems = (RecyclerView)findViewById(R.id.rvMovieItems);
         rvMovieItems.setAdapter(movieRecyclerAdapter);
         rvMovieItems.setLayoutManager(new LinearLayoutManager(this));
 
