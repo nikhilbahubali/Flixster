@@ -13,6 +13,12 @@ import butterknife.ButterKnife;
 
 public class ViewHolderPopularMovie extends RecyclerView.ViewHolder {
     @BindView(R.id.ivMovieBackdrop) ImageView ivBackdrop;
+    @BindView(R.id.ivVideoPlayButton) ImageView ivVideoPlayButton;
+
+
+    public ImageView getIvVideoPlayButton() {
+        return ivVideoPlayButton;
+    }
 
     public ImageView getIvBackdrop() {
         return ivBackdrop;

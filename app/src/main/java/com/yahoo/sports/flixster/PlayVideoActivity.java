@@ -25,6 +25,7 @@ public class PlayVideoActivity extends YouTubeBaseActivity {
         setContentView(R.layout.activity_play_video);
         ButterKnife.bind(this);
 
+        final String trailer = getIntent().getStringExtra("Trailer");
         mYouTubePlayerView.initialize("AIzaSyCS4GJEFSukl5_ybeCNrIRzcOjcOCEeoB8",
                 new YouTubePlayer.OnInitializedListener() {
                     @Override
@@ -32,7 +33,7 @@ public class PlayVideoActivity extends YouTubeBaseActivity {
                                                         YouTubePlayer youTubePlayer, boolean b) {
 
                         // do any work here to cue video, play video, etc.
-                        youTubePlayer.loadVideo("fis-9Zqu2Ro");
+                        youTubePlayer.loadVideo(trailer);
                     }
 
                     @Override
