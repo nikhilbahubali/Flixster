@@ -16,6 +16,7 @@ public class Movie {
     private String posterPath;
     private String backdropPath;
     private double vote_average;
+    private String release_date;
 
     private static final String prefix = "https://image.tmdb.org/t/p/w342";
 
@@ -25,6 +26,7 @@ public class Movie {
         posterPath = prefix + json.getString("poster_path");
         backdropPath = prefix + json.getString("backdrop_path");
         vote_average = json.getDouble("vote_average");
+        release_date = json.getString("release_date");
     }
 
     public String getPosterPath() {
@@ -47,6 +49,10 @@ public class Movie {
         return vote_average;
     }
 
+    public String getRelease_date() {
+        return release_date;
+    }
+
     public static ArrayList<Movie> fromJSONArray(JSONArray results) {
         ArrayList<Movie> movies = new ArrayList<>();
 
@@ -58,5 +64,15 @@ public class Movie {
             }
         }
         return movies;
+    }
+
+    public static void fromTrailersJSONArray(JSONArray results, ArrayList<String> trailers) {
+        for(int i = 0; i < results.length(); i++) {
+            try {
+                trailers.add(results.getJSONObject(i).getString("source"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
