@@ -16,19 +16,23 @@ import com.yahoo.sports.flixster.models.Movie;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
-
-import static com.yahoo.sports.flixster.R.id.ivMoviePoster;
 
 /**
  * Created by nikhilba on 1/23/17.
  */
 
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
-    private static class ViewHolder {
-        public ImageView ivImage;
-        public TextView tvTitle;
-        public TextView tvOverview;
+    static class ViewHolder {
+        @BindView(R.id.ivMoviePoster) ImageView ivImage;
+        @BindView(R.id.tvMovieTitle) TextView tvTitle;
+        @BindView(R.id.tvMovieOverview) TextView tvOverview;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
     public MovieArrayAdapter(Context context, List<Movie> movies) {
@@ -42,19 +46,12 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         Movie movie = getItem(position);
 
         // viewholder cache
-        ViewHolder viewHolder = new ViewHolder();
+        ViewHolder viewHolder;
 
         // inflate view if required
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_item, parent, false);
-
-            // load title
-            viewHolder.tvTitle = (TextView)convertView.findViewById(R.id.tvMovieTitle);
-            // load overview
-            viewHolder.tvOverview = (TextView)convertView.findViewById(R.id.tvMovieOverview);
-            // reset any previously loaded image
-            viewHolder.ivImage = (ImageView) convertView.findViewById(ivMoviePoster);
-
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
