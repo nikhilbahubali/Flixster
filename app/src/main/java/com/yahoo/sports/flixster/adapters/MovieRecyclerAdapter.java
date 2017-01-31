@@ -25,17 +25,15 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 public class MovieRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private ArrayList<Movie> mMovies;
-    private ArrayList<String> mTrailers;
     private static int TYPE_REGULAR_MOVIE = 0;
     private static int TYPE_POPULAR_MOVIE = 1;
     private static double POPULAR_MOVIE_MIN_RATING = 6.0;
 
 
-    public MovieRecyclerAdapter(Context context, ArrayList<Movie> movies, ArrayList<String> trailers) {
+    public MovieRecyclerAdapter(Context context, ArrayList<Movie> movies) {
         super();
         mContext = context;
         this.mMovies = movies;
-        mTrailers = trailers;
     }
 
     @Override
@@ -76,7 +74,7 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 intent.putExtra("Synopsis", movie.getOverview());
                 intent.putExtra("Rating", movie.getVote_average());
                 intent.putExtra("BackdropPath", movie.getBackdropPath());
-                intent.putExtra("Trailer", mTrailers.get(position));
+                intent.putExtra("Id", movie.getId());
                 mContext.startActivity(intent);
             });
 
@@ -92,7 +90,7 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             holderPopularMovie.getIvVideoPlayButton().setOnClickListener(v -> {
                 Intent intent = new Intent(mContext, PlayVideoActivity.class);
-                intent.putExtra("Trailer", mTrailers.get(position));
+                intent.putExtra("Id", movie.getId());
                 mContext.startActivity(intent);
             });
         }

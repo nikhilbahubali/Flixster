@@ -1,84 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:scrollbars="vertical"
-    >
+    android:layout_height="wrap_content">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_gravity="center_horizontal|center_vertical">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:scrollbars="vertical">
 
-        <ImageView
-            android:id="@+id/ivMovieDetailsBackdrop"
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            tools:src="@mipmap/ic_launcher" />
+            android:layout_height="180dp"
+            android:layout_gravity="center_horizontal|center_vertical">
 
-        <ImageView
-            android:id="@+id/ivMovieDetailsVideoPlayButton"
+            <ImageView
+                android:id="@+id/ivMovieDetailsBackdrop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                tools:src="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:id="@+id/ivMovieDetailsVideoPlayButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:src="@mipmap/playicon" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvMovieDetailsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:src="@mipmap/playicon" />
+            android:paddingBottom="@dimen/font_size_extra_small"
+            android:paddingLeft="@dimen/font_size_extra_small"
+            android:paddingRight="@dimen/font_size_extra_small"
+            android:paddingTop="@dimen/font_size_extra_small"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/font_size_huge"
+            android:textStyle="bold"
+            tools:text="Assassin's Creed" />
 
-    </FrameLayout>
+        <TextView
+            android:id="@+id/tvMovieDetailsReleaseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/font_size_extra_small"
+            android:paddingLeft="@dimen/font_size_extra_small"
+            android:paddingRight="@dimen/font_size_extra_small"
+            android:paddingTop="@dimen/font_size_extra_small"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/font_size_large"
+            android:textStyle="bold"
+            tools:text="Release Date: 2016-01-28" />
 
-    <TextView
-        tools:text="Assassin's Creed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvMovieDetailsTitle"
-        android:textSize="@dimen/font_size_huge"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        android:paddingTop="@dimen/font_size_extra_small"
-        android:paddingBottom="@dimen/font_size_extra_small"
-        android:paddingRight="@dimen/font_size_extra_small"
-        android:paddingLeft="@dimen/font_size_extra_small"
-        />
+        <RatingBar
+            android:id="@+id/rbMovieDetailsRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:numStars="10"
+            android:paddingLeft="@dimen/font_size_extra_small"
+            android:paddingRight="@dimen/font_size_extra_small"
+            android:theme="@style/RatingBar" />
 
-    <TextView
-        tools:text="Release Date: 2016-01-28"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvMovieDetailsReleaseDate"
-        android:textSize="@dimen/font_size_large"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        android:paddingTop="@dimen/font_size_extra_small"
-        android:paddingBottom="@dimen/font_size_extra_small"
-        android:paddingRight="@dimen/font_size_extra_small"
-        android:paddingLeft="@dimen/font_size_extra_small"
-        />
+        <TextView
+            android:id="@+id/tvMovieDetailsSynopsis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/font_size_extra_small"
+            android:paddingLeft="@dimen/font_size_extra_small"
+            android:paddingRight="@dimen/font_size_extra_small"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/font_size_medium"
+            android:textStyle="italic"
+            tools:text="Lynch discovers he is a descendant of the secret Assassins society through unlocked genetic memories that allow him to relive the adventures of his ancestor, Aguilar, in 15th Century Spain. After gaining incredible knowledge and skills he’s poised to take on the oppressive Knights Templar in the present day." />
 
-    <RatingBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/rbMovieDetailsRating"
-        android:paddingRight="@dimen/font_size_extra_small"
-        android:paddingLeft="@dimen/font_size_extra_small"
-        android:theme="@style/RatingBar"
-        android:numStars="10"
-        android:clickable="false"
-        />
-
-    <TextView
-        tools:text="Lynch discovers he is a descendant of the secret Assassins society through unlocked genetic memories that allow him to relive the adventures of his ancestor, Aguilar, in 15th Century Spain. After gaining incredible knowledge and skills he’s poised to take on the oppressive Knights Templar in the present day."
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvMovieDetailsSynopsis"
-        android:textSize="@dimen/font_size_medium"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="italic"
-        android:paddingBottom="@dimen/font_size_extra_small"
-        android:paddingRight="@dimen/font_size_extra_small"
-        android:paddingLeft="@dimen/font_size_extra_small"
-        />
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -15,7 +15,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,11 +33,13 @@ public class MovieActivity extends AppCompatActivity {
 
 
     private ArrayList<Movie> mMovies = new ArrayList<>();
-    private ArrayList<String> mTrailers = new ArrayList<>();
     private MovieRecyclerAdapter movieRecyclerAdapter;
 
-    @BindView(R.id.rvMovieItems) RecyclerView rvMovieItems;
-    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.rvMovieItems)
+    RecyclerView rvMovieItems;
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,40 +60,12 @@ public class MovieActivity extends AppCompatActivity {
     }
 
     private void populateMovieObjects() {
-        movieRecyclerAdapter = new MovieRecyclerAdapter(this, mMovies, mTrailers);
+        movieRecyclerAdapter = new MovieRecyclerAdapter(this, mMovies);
         rvMovieItems.setAdapter(movieRecyclerAdapter);
         rvMovieItems.setLayoutManager(new LinearLayoutManager(this));
 
-        fetchTrailers();
+        //fetchTrailers();
         fetchMovies();
-    }
-
-    private void fetchTrailers() {
-        // create request
-        OkHttpClient client = new OkHttpClient();
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(TRAILER_API_URL).newBuilder();
-        String url = urlBuilder.addQueryParameter(API_KEY, API_KEY_VALUE).build().toString();
-        Request request = new Request.Builder().url(url).build();
-
-        // submit request, handle response
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    // get json results array
-                    JSONObject obj = new JSONObject(response.body().string());
-                    JSONArray results = obj.getJSONArray("youtube");
-                    Movie.fromTrailersJSONArray(results, mTrailers);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     private void fetchMovies() {
@@ -130,20 +103,11 @@ public class MovieActivity extends AppCompatActivity {
 
                         // if pull refresh, stop it
                         swipeContainer.setRefreshing(false);
-
-                        // fill trailers
-                        fillTrailers();
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
-    }
-
-    private void fillTrailers() {
-        for (int i = mTrailers.size() - 1, bound = mTrailers.size(); i < mMovies.size(); i++) {
-            mTrailers.add(mTrailers.get(new Random().nextInt(bound)));
-        }
     }
 }

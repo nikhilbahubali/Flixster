@@ -11,6 +11,7 @@ import java.util.ArrayList;
  */
 
 public class Movie {
+    private final int id;
     private String title;
     private String overview;
     private String posterPath;
@@ -21,6 +22,7 @@ public class Movie {
     private static final String prefix = "https://image.tmdb.org/t/p/w342";
 
     public Movie(JSONObject json) throws JSONException {
+        id = json.getInt("id");
         title = json.getString("original_title");
         overview = json.getString("overview");
         posterPath = prefix + json.getString("poster_path");
@@ -53,10 +55,14 @@ public class Movie {
         return release_date;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public static ArrayList<Movie> fromJSONArray(JSONArray results) {
         ArrayList<Movie> movies = new ArrayList<>();
 
-        for(int i = 0; i < results.length(); i++) {
+        for (int i = 0; i < results.length(); i++) {
             try {
                 movies.add(new Movie(results.getJSONObject(i)));
             } catch (JSONException e) {
@@ -67,7 +73,7 @@ public class Movie {
     }
 
     public static void fromTrailersJSONArray(JSONArray results, ArrayList<String> trailers) {
-        for(int i = 0; i < results.length(); i++) {
+        for (int i = 0; i < results.length(); i++) {
             try {
                 trailers.add(results.getJSONObject(i).getString("source"));
             } catch (JSONException e) {
@@ -75,4 +81,5 @@ public class Movie {
             }
         }
     }
+
 }

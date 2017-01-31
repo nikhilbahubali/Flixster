@@ -21,7 +21,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @BindView(R.id.tvMovieDetailsReleaseDate) TextView tvMovieDetailsReleaseDate;
     @BindView(R.id.tvMovieDetailsSynopsis) TextView tvMovieDetailsSynopsis;
     @BindView(R.id.rbMovieDetailsRating) RatingBar rbMovieDetailsRating;
-    private String mTrailer;
+    private int mTrailerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +40,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
         tvMovieDetailsReleaseDate.setText("Release Date: " + intent.getStringExtra("ReleaseDate"));
         tvMovieDetailsSynopsis.setText(intent.getStringExtra("Synopsis"));
         rbMovieDetailsRating.setRating((float) intent.getDoubleExtra("Rating", 0));
-        mTrailer = intent.getStringExtra("Trailer");
+        mTrailerId = intent.getIntExtra("Id", 0);
 
         getIvMovieDetailsVideoPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), PlayVideoActivity.class);
-                intent.putExtra("Trailer", mTrailer);
+                intent.putExtra("Id", mTrailerId);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getBaseContext().startActivity(intent);
             }
